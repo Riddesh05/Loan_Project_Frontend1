@@ -1,1 +1,587 @@
-<p>emi-schedule works!</p>
+
+<div class="container-fluid emi-page p-4">
+
+  <div class="emi-page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold mb-1">EMI Schedule</h3>
+      <p class="text-muted mb-0">View your loan installment details</p>
+    </div>
+
+    <div class="notification-dropdown-wrapper">
+      <button
+        type="button"
+        class="notification-bell-btn"
+        (click)="toggleNotifications()"
+        aria-label="Toggle notifications">
+
+        <mat-icon>notifications</mat-icon>
+
+        <span
+          class="notification-badge"
+          *ngIf="unreadNotificationCount > 0">
+          {{ unreadNotificationCount }}
+        </span>
+      </button>
+
+      <div
+        class="notification-dropdown"
+        *ngIf="notificationsOpen">
+
+        <div class="notification-dropdown-header">
+          <div>
+            <h5 class="mb-1">Notifications</h5>
+            <small class="text-muted">Your EMI reminders</small>
+          </div>
+
+          <button
+            type="button"
+            class="notification-close-btn"
+            (click)="toggleNotifications()"
+            aria-label="Close notifications">
+            ✕
+          </button>
+        </div>
+
+        <div *ngIf="notificationLoading" class="text-center p-3">
+          <mat-spinner diameter="28"></mat-spinner>
+          <p class="text-muted small mt-2 mb-0">
+            Loading notifications...
+          </p>
+        </div>
+
+        <div
+          *ngIf="!notificationLoading && notificationError"
+          class="alert alert-warning m-3">
+          {{ notificationError }}
+        </div>
+
+        <div
+          *ngIf="!notificationLoading &&
+                 !notificationError &&
+                 notifications.length === 0"
+          class="notification-empty">
+
+          <mat-icon>notifications_none</mat-icon>
+          <p class="fw-semibold mb-1">No notifications yet</p>
+          <small>EMI reminders will appear here.</small>
+        </div>
+
+        <div *ngIf="!notificationLoading && !notificationError">
+          <div
+            class="notification-item"
+            *ngFor="let notification of notifications"
+            [class.notification-unread]="!notification.isRead">
+
+            <div class="notification-icon"
+              [ngClass]="{
+                'notification-due-soon':
+                  notification.notificationType === 'EMI_DUE_SOON',
+                'notification-due-today':
+                  notification.notificationType === 'EMI_DUE_TODAY',
+                'notification-overdue':
+                  notification.notificationType === 'EMI_OVERDUE'
+              }">
+
+              <mat-icon>
+                {{
+                  notification.notificationType === 'EMI_OVERDUE'
+                    ? 'warning'
+                    : notification.notificationType === 'EMI_DUE_TODAY'
+                      ? 'event'
+                      : 'schedule'
+                }}
+              </mat-icon>
+            </div>
+
+            <div class="notification-content">
+              <div class="d-flex justify-content-between align-items-start gap-2">
+                <h6 class="fw-bold mb-1">
+                  {{ notification.title }}
+                </h6>
+
+                <span
+                  class="notification-status"
+                  *ngIf="!notification.isRead">
+                  New
+                </span>
+              </div>
+
+              <p class="mb-1">{{ notification.message }}</p>
+
+              <small class="text-muted">
+                {{ notification.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+              </small>
+
+              <div class="mt-2" *ngIf="!notification.isRead">
+                <button
+                  type="button"
+                  class="mark-read-link"
+                  (click)="markNotificationAsRead(notification)">
+                  Mark as read
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Loan Account Selection -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row align-items-center g-3">
+
+        <div class="col-12 col-md-7">
+          <label class="form-label fw-semibold">Loan Account ID</label>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Enter loan account ID</mat-label>
+
+            <input
+              matInput
+              type="number"
+              min="1"
+              [(ngModel)]="loanAccountId"
+              placeholder="Enter active loan account ID">
+
+            <mat-icon matSuffix>account_balance</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-md-5 d-flex gap-2">
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="loading || !loanAccountId"
+            (click)="loadSchedule()">
+            <mat-icon>visibility</mat-icon>
+            View Schedule
+          </button>
+
+          <button
+            mat-stroked-button
+            [disabled]="loading || !loanAccountId"
+            (click)="generateSchedule()">
+            <mat-icon>calendar_month</mat-icon>
+            Generate
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="emi-summary-row row g-3 mb-4" *ngIf="summary">
+
+    <!-- Paid EMIs -->
+    <div class="col-12 col-md-4">
+      <div class="card summary-card paid-card h-100">
+        <div class="card-body">
+
+          <div class="summary-card-header">
+            <div>
+              <h6 class="summary-heading">Paid EMIs</h6>
+              <p class="summary-subtitle">
+                Successfully paid installments
+              </p>
+            </div>
+
+            <div class="summary-icon paid-icon">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+          </div>
+
+          <div class="summary-stats">
+            <div class="summary-stat">
+              <span>Count</span>
+              <strong>{{ summary.paidInstallments ?? 0 }}</strong>
+            </div>
+
+            <div class="summary-stat">
+              <span>Total Amount</span>
+              <strong>
+                {{ (summary.totalPaidAmount ?? 0) |
+                    currency:'INR':'symbol':'1.0-2' }}
+              </strong>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending EMIs -->
+    <div class="col-12 col-md-4">
+      <div class="card summary-card pending-card h-100">
+        <div class="card-body">
+
+          <div class="summary-card-header">
+            <div>
+              <h6 class="summary-heading">Pending EMIs</h6>
+              <p class="summary-subtitle">
+                Installments awaiting payment
+              </p>
+            </div>
+
+            <div class="summary-icon pending-icon">
+              <i class="bi bi-clock-history"></i>
+            </div>
+          </div>
+
+          <div class="summary-stats">
+            <div class="summary-stat">
+              <span>Count</span>
+              <strong>{{ summary.pendingInstallments ?? 0 }}</strong>
+            </div>
+
+            <div class="summary-stat">
+              <span>Total Amount</span>
+              <strong>
+                {{ (summary.totalPendingAmount ?? 0) |
+                    currency:'INR':'symbol':'1.0-2' }}
+              </strong>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Remaining Balance -->
+    <div class="col-12 col-md-4">
+      <div class="card summary-card balance-card h-100">
+        <div class="card-body">
+
+          <div class="summary-card-header">
+            <div>
+              <h6 class="summary-heading">Remaining Balance</h6>
+              <p class="summary-subtitle">Outstanding loan amount</p>
+            </div>
+
+            <div class="summary-icon balance-icon">
+              <i class="bi bi-wallet2"></i>
+            </div>
+          </div>
+
+          <div class="summary-stats">
+            <div class="summary-stat">
+              <span>EMIs Left</span>
+              <strong>{{ summary.pendingInstallments ?? 0 }}</strong>
+            </div>
+
+            <div class="summary-stat">
+              <span>Balance</span>
+              <strong>
+                {{ (summary.remainingPrincipal ?? 0) |
+                    currency:'INR':'symbol':'1.0-2' }}
+              </strong>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Schedule Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Schedule Loading -->
+  <div *ngIf="loading" class="text-center py-3">
+    <mat-spinner diameter="35"></mat-spinner>
+    <p class="text-muted mt-2">Loading EMI schedule...</p>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    class="d-flex justify-content-between align-items-center
+           flex-wrap gap-2 mb-3 pagination-toolbar">
+
+    <div class="pagination-info">
+      Showing {{ schedule.length === 0 ? 0 : pageIndex * pageSize + 1 }}
+      - {{ pageEnd }}
+      of {{ schedule.length }} installments
+    </div>
+
+    <mat-paginator
+      [length]="schedule.length"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [showFirstLastButtons]="false"
+      (page)="onPageChange($event)"
+      aria-label="EMI schedule pagination">
+    </mat-paginator>
+
+  </div>
+
+  <!-- EMI Schedule Table -->
+  <div class="card border-0 shadow-sm schedule-card">
+    <div class="table-responsive">
+
+      <table class="table table-hover align-middle mb-0">
+
+        <thead>
+          <tr>
+            <th>Installment</th>
+            <th>Due Date</th>
+            <th>EMI</th>
+            <th>Principal</th>
+            <th>Interest</th>
+            <th>Opening</th>
+            <th>Closing</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let item of paginatedSchedule">
+            <td>{{ item.installmentNo }}</td>
+
+            <td>{{ item.dueDate | date:'dd-MMM-yyyy' }}</td>
+
+            <td>
+              {{ item.emi | currency:'INR':'symbol':'1.2-2' }}
+            </td>
+
+            <td>
+              {{ item.principalAmount | currency:'INR':'symbol':'1.0-2' }}
+            </td>
+
+            <td>
+              {{ item.interestAmount | currency:'INR':'symbol':'1.0-2' }}
+            </td>
+
+            <td>
+              {{ item.openingBalance | currency:'INR':'symbol':'1.0-2' }}
+            </td>
+
+            <td>
+              {{ item.closingBalance | currency:'INR':'symbol':'1.0-2' }}
+            </td>
+
+            <td>
+              <span
+                class="status-text"
+                [ngClass]="{
+                  'status-paid': item.paymentStatus === 'Paid',
+                  'status-pending': item.paymentStatus === 'Pending'
+                }">
+                {{ item.paymentStatus }}
+              </span>
+            </td>
+
+            <td>
+              <button
+                mat-stroked-button
+                color="primary"
+                [disabled]="!item.isPayable ||
+                            item.paymentStatus !== 'Pending'"
+                (click)="openPayment(item)">
+                Pay
+              </button>
+            </td>
+          </tr>
+
+          <!-- Empty Schedule -->
+          <tr *ngIf="!loading && schedule.length === 0">
+            <td colspan="9" class="text-center py-5">
+              <mat-icon class="text-muted">event_note</mat-icon>
+
+              <p class="fw-semibold mb-1">
+                No EMI schedule found
+              </p>
+
+              <p class="text-muted small mb-0">
+                Enter a loan account ID and click View Schedule.
+              </p>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Razorpay Payment Modal -->
+<div class="payment-overlay" *ngIf="paymentModalOpen">
+  <div class="payment-modal">
+
+    <!-- Modal Header -->
+    <div class="payment-modal-header">
+      <div>
+        <h4 class="mb-1">Pay EMI</h4>
+        <p class="mb-0">Review your installment details</p>
+      </div>
+
+      <button
+        mat-button
+        [disabled]="breakdownLoading"
+        (click)="closePayment()">
+        Close
+      </button>
+    </div>
+
+    <!-- Payment Details -->
+    <div class="payment-modal-body" *ngIf="selectedEmi">
+
+      <div class="payment-details">
+        <p>
+          Loan Account ID
+          <strong>{{ selectedEmi.loanAccountId }}</strong>
+        </p>
+
+        <p>
+          EMI Schedule ID
+          <strong>{{ selectedEmi.emiScheduleId }}</strong>
+        </p>
+
+        <p>
+          Installment
+          <strong>{{ selectedEmi.installmentNo }}</strong>
+        </p>
+
+        <p>
+          Due Date
+          <strong>{{ selectedEmi.dueDate | date:'dd-MMM-yyyy' }}</strong>
+        </p>
+
+        <p>
+          EMI Amount
+          <strong>
+            {{ selectedEmi.emi | currency:'INR':'symbol':'1.2-2' }}
+          </strong>
+        </p>
+
+        <p>
+          Principal
+          <strong>
+            {{ selectedEmi.principalAmount |
+                currency:'INR':'symbol':'1.2-2' }}
+          </strong>
+        </p>
+
+        <p>
+          Interest
+          <strong>
+            {{ selectedEmi.interestAmount |
+                currency:'INR':'symbol':'1.2-2' }}
+          </strong>
+        </p>
+
+        <p>
+          Status
+          <strong>{{ selectedEmi.paymentStatus }}</strong>
+        </p>
+      </div>
+
+      <!-- Payment Breakdown -->
+      <div class="breakdown-panel">
+        <h5>Payment Breakdown</h5>
+
+        <div *ngIf="breakdownLoading" class="text-center py-4">
+          <mat-spinner diameter="32"></mat-spinner>
+          <p class="mt-2">Loading payment breakdown...</p>
+        </div>
+
+        <div *ngIf="breakdownError" class="alert alert-danger">
+          {{ breakdownError }}
+        </div>
+
+        <ng-container *ngIf="paymentBreakdown as b">
+
+          <p>
+            Base EMI
+            <strong>
+              {{ b.baseEmi | currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+          </p>
+
+          <p>
+            Previous pending EMIs
+            <strong>
+              {{ b.carryForwardEmiAmount |
+                  currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+          </p>
+
+          <p>
+            Current-month EMI
+            <strong>
+              {{ b.currentMonthEmiAmount |
+                  currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+          </p>
+
+          <p>
+            Bounce charges
+            <strong>
+              {{ b.bounceCharges | currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+          </p>
+
+          <p>
+            Late payment interest
+            <strong>
+              {{ b.latePaymentInterest |
+                  currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+          </p>
+
+          <p>
+            Daily penalty
+            <strong>
+              {{ b.dailyPenalty | currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+          </p>
+
+          <p>
+            Overdue days
+            <strong>{{ b.overdueDays }}</strong>
+          </p>
+
+          <div class="total-payable">
+            <span>Total Payable</span>
+            <strong>
+              {{ b.totalPayable | currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+          </div>
+
+        </ng-container>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="payment-modal-footer">
+      <button
+        mat-stroked-button
+        (click)="closePayment()"
+        [disabled]="breakdownLoading">
+        Cancel
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!paymentBreakdown ||
+                    breakdownLoading ||
+                    !!breakdownError"
+        (click)="payWithRazorpay()">
+        {{ breakdownLoading ? 'Processing...' : 'Confirm & Pay' }}
+      </button>
+    </div>
+
+  </div>
+</div>

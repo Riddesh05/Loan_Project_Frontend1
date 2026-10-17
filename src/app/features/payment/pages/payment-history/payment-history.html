@@ -1,0 +1,83 @@
+
+<section class="history-page">
+  <div class="page-header">
+    <div>
+      <h1>Payment History</h1>
+      <p>Check your loan's payment history here.</p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="loadHistory()"
+      [disabled]="loading">
+      {{ loading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    Loading payment history...
+  </div>
+
+  <div class="error-state" *ngIf="!loading && errorMessage">
+    {{ errorMessage }}
+    <button type="button" (click)="loadHistory()">Try Again</button>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !errorMessage && payments.length === 0">
+    <h3>No payments found</h3>
+    <p>Successful payments ki entries yahan dikhengi jab payment records available honge.</p>
+  </div>
+
+  <div class="table-wrapper" *ngIf="!loading && !errorMessage && payments.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Payment ID</th>
+          <th>Date & Time</th>
+          <th>EMI ID</th>
+          <th>Amount</th>
+          <th>Payment Mode</th>
+          <th>Status</th>
+          <th>Transaction Reference</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let payment of payments; trackBy: trackByPaymentId">
+          <td>#{{ payment.paymentId }}</td>
+
+          <td>
+            {{ payment.paymentDate
+              ? (payment.paymentDate | date:'dd MMM yyyy, hh:mm a')
+              : '—' }}
+          </td>
+
+          <td>{{ payment.emiScheduleId ?? '—' }}</td>
+
+          <td class="amount">
+            {{ payment.paymentAmount | currency:'INR':'symbol':'1.2-2' }}
+          </td>
+
+          <td>{{ payment.paymentName || '—' }}</td>
+
+          <td>
+            <span
+              class="status"
+              [ngClass]="{
+                'success': payment.paymentStatus?.toUpperCase() === 'SUCCESS',
+                'failed': payment.paymentStatus?.toUpperCase() === 'FAILED',
+                'pending': payment.paymentStatus?.toUpperCase() === 'PENDING'
+              }">
+              {{ payment.paymentStatus || 'Unknown' }}
+            </span>
+          </td>
+
+          <td class="reference">
+            {{ payment.transactionRefNo || '—' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

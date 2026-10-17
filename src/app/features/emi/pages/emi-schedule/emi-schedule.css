@@ -1,0 +1,758 @@
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.emi-page {
+  min-height: 100%;
+  background-color: #f5f7fb;
+  color: #263247;
+}
+
+/* =========================
+   PAGE HEADING
+========================= */
+
+.emi-page h3 {
+  color: #174b91;
+  font-size: 1.65rem;
+  letter-spacing: -0.4px;
+}
+
+.emi-page .text-muted {
+  color: #778399 !important;
+}
+
+/* =========================
+   LOAN ACCOUNT SELECTION
+========================= */
+
+.emi-page > .card {
+  border-radius: 12px;
+}
+
+.emi-page .card-body {
+  padding: 20px;
+}
+
+.emi-page mat-form-field {
+  margin-bottom: -1.25em;
+}
+
+.emi-page button {
+  min-height: 42px;
+  border-radius: 7px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.emi-page button mat-icon {
+  margin-right: 4px;
+}
+
+/* =========================
+   EMI SUMMARY CARDS
+========================= */
+
+/* Force three equal columns on desktop */
+.emi-page .emi-summary-row {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 20px;
+  width: 100%;
+  margin: 0 0 24px;
+  align-items: stretch;
+}
+
+/* Each card wrapper */
+.emi-page .emi-summary-col {
+  display: flex;
+  min-width: 0;
+  width: auto !important;
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+/* Common card styling */
+.emi-page .summary-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  border: 1px solid #e7ecf4 !important;
+  border-top: 4px solid transparent !important;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(24, 55, 95, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emi-page .summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(24, 55, 95, 0.10);
+}
+
+.emi-page .summary-card .card-body {
+  flex: 1;
+  padding: 22px;
+}
+
+/* Individual card colors */
+.emi-page .paid-card {
+  border-top-color: #198754 !important;
+}
+
+.emi-page .pending-card {
+  border-top-color: #e58a16 !important;
+}
+
+.emi-page .balance-card {
+  border-top-color: #3478db !important;
+}
+
+/* Card heading and subtitle */
+.emi-page .summary-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.emi-page .summary-heading {
+  margin: 0 0 7px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.emi-page .paid-card .summary-heading {
+  color: #198754;
+}
+
+.emi-page .pending-card .summary-heading {
+  color: #d9820b;
+}
+
+.emi-page .balance-card .summary-heading {
+  color: #3478db;
+}
+
+.emi-page .summary-subtitle {
+  margin: 0;
+  color: #778399;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Card icons */
+.emi-page .summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 21px;
+}
+
+.emi-page .paid-icon {
+  color: #198754;
+  background: #e8f6ee;
+}
+
+.emi-page .pending-icon {
+  color: #d9820b;
+  background: #fff3df;
+}
+
+.emi-page .balance-icon {
+  color: #3478db;
+  background: #eaf2ff;
+}
+
+/* Count and amount */
+.emi-page .summary-stats {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 14px;
+}
+
+.emi-page .summary-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.emi-page .summary-stat span {
+  color: #778399;
+  font-size: 13px;
+}
+
+.emi-page .summary-stat strong {
+  color: #27364c;
+  font-size: clamp(14px, 1.1vw, 19px);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* =========================
+   ERROR AND LOADING
+========================= */
+
+.emi-page .alert {
+  border-radius: 10px;
+}
+
+.emi-page mat-spinner {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =========================
+   EMI SCHEDULE TABLE
+========================= */
+
+.schedule-card {
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #e7ecf4 !important;
+  background: #fff;
+}
+
+.schedule-card .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.schedule-card table {
+  width: 100%;
+  min-width: 920px;
+  font-size: 0.84rem;
+}
+
+.schedule-card thead th {
+  padding: 16px 14px;
+  background-color: #eaf1fb;
+  color: #254a7c;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border-bottom: 1px solid #dce5f2;
+}
+
+.schedule-card tbody td {
+  padding: 14px;
+  color: #48566c;
+  white-space: nowrap;
+  border-bottom-color: #edf0f5;
+}
+
+.schedule-card tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.schedule-card tbody tr:hover td {
+  background-color: #f6f9ff;
+}
+
+/* Payment status */
+.status-text {
+  display: inline-block;
+  min-width: 62px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-paid {
+  color: #238453;
+}
+
+.status-pending {
+  color: #c56d75;
+}
+
+/* =========================
+   PAYMENT MODAL
+========================= */
+
+.payment-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.payment-modal {
+  width: min(900px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.payment-modal-header,
+.payment-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.payment-modal-header h4 {
+  color: #164e8a;
+  font-weight: 700;
+}
+
+.payment-modal-header p {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.payment-modal-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  padding: 22px;
+}
+
+.payment-details p,
+.breakdown-panel p {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  margin: 0;
+  border-bottom: 1px solid #edf0f4;
+  font-size: 14px;
+}
+
+.payment-details strong,
+.breakdown-panel strong {
+  text-align: right;
+}
+
+.breakdown-panel {
+  min-width: 0;
+  padding: 16px;
+  border-radius: 10px;
+  background: #f5f8fc;
+}
+
+.breakdown-panel h5 {
+  margin-bottom: 12px;
+  color: #164e8a;
+  font-weight: 700;
+}
+
+.total-payable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  background: #e6f0ff;
+  border-radius: 8px;
+  color: #164e8a;
+  font-weight: 700;
+}
+
+.total-payable strong {
+  font-size: 20px;
+}
+
+.payment-modal-footer {
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 0;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+/* Tablet: two summary cards per row */
+@media (max-width: 900px) {
+  .emi-page .emi-summary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Mobile: one summary card per row */
+@media (max-width: 600px) {
+  .emi-page {
+    padding: 16px !important;
+  }
+
+  .emi-page h3 {
+    font-size: 1.35rem;
+  }
+
+  .emi-page .card-body {
+    padding: 16px;
+  }
+
+  .emi-page .emi-summary-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px;
+  }
+
+  .emi-page .summary-card .card-body {
+    padding: 18px;
+  }
+
+  .emi-page .summary-stat strong {
+    font-size: 16px;
+  }
+
+  .emi-page button {
+    flex: 1;
+  }
+
+  .payment-overlay {
+    padding: 10px;
+  }
+
+  .payment-modal-body {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 14px;
+  }
+
+  .payment-modal-header,
+  .payment-modal-footer {
+    padding: 14px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .emi-page .summary-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .payment-details p,
+  .breakdown-panel p {
+    font-size: 12px;
+  }
+}
+
+/* EMI Table Pagination */
+.pagination-toolbar {
+  background: #ffffff;
+  border: 1px solid #e7ecf4;
+  border-radius: 12px;
+  padding: 10px 16px;
+}
+
+.pagination-info {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.pagination-toolbar mat-paginator {
+  background: transparent;
+}
+
+@media (max-width: 600px) {
+  .pagination-toolbar {
+    align-items: flex-start !important;
+    flex-direction: column;
+  }
+
+  .pagination-toolbar mat-paginator {
+    width: 100%;
+  }
+}
+
+/* EMI Notifications */
+.notification-card {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.notification-count {
+  background: #e8f0ff;
+  color: #2457b2;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.notification-empty mat-icon {
+  font-size: 38px;
+  width: 38px;
+  height: 38px;
+  color: #9ca3af;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-top: 12px;
+  background: #fff;
+}
+
+.notification-unread {
+  background: #f5f8ff;
+  border-color: #cbdcff;
+}
+
+.notification-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e8f0ff;
+  color: #2457b2;
+}
+
+.notification-icon.notification-due-today {
+  background: #fff3cd;
+  color: #946200;
+}
+
+.notification-icon.notification-overdue {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-content p {
+  color: #4b5563;
+  overflow-wrap: anywhere;
+}
+
+.notification-status {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 12px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mark-read-btn {
+  flex-shrink: 0;
+}
+
+@media (max-width: 576px) {
+  .notification-item {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  .notification-content {
+    flex-basis: calc(100% - 56px);
+  }
+
+  .mark-read-btn {
+    margin-left: 54px;
+  }
+}
+
+.emi-page-header {
+  position: relative;
+  gap: 16px;
+}
+
+.notification-dropdown-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 1000;
+}
+
+.notification-bell-btn {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, .06);
+  transition: .2s ease;
+}
+
+.notification-bell-btn:hover {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  max-height: 430px;
+  overflow-y: auto;
+  background: #fff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, .16);
+}
+
+.notification-dropdown-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.notification-dropdown-header h5 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.notification-close-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #475569;
+  cursor: pointer;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.notification-unread {
+  background: #eff6ff;
+  border-left: 3px solid #3b82f6;
+}
+
+.notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-content h6 {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.notification-content p {
+  color: #475569;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.notification-status {
+  flex-shrink: 0;
+  padding: 3px 7px;
+  border-radius: 20px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.notification-due-soon {
+  color: #2563eb;
+}
+
+.notification-due-today {
+  color: #d97706;
+}
+
+.notification-overdue {
+  color: #dc2626;
+}
+
+.mark-read-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notification-empty {
+  padding: 28px 16px;
+  text-align: center;
+  color: #64748b;
+}
+
+.notification-empty mat-icon {
+  display: block;
+  margin: 0 auto 8px;
+}
+
+@media (max-width: 576px) {
+  .emi-page-header {
+    align-items: flex-start !important;
+  }
+
+  .notification-dropdown {
+    width: 320px;
+  }
+}

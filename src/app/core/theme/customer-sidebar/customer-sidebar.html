@@ -1,4 +1,3 @@
-<p>customer-sidebar works!</p>
 
 <aside class="sidebar">
   <div class="sidebar-brand">
@@ -19,11 +18,73 @@
       <i class="bi bi-chevron-down ms-auto"></i>
     </a>
 
-    <a routerLink="/emi" class="menu-link">
-      <i class="bi bi-wallet2"></i>
-      <span>Payments</span>
-      <i class="bi bi-chevron-down ms-auto"></i>
+    <!-- Payments Dropdown -->
+<div class="menu-group">
+
+  <button
+    type="button"
+    class="menu-link payment-toggle"
+    (click)="togglePayments()"
+    [attr.aria-expanded]="paymentsExpanded">
+
+    <i class="bi bi-wallet2"></i>
+    <span>Payments</span>
+
+    <i
+      class="bi ms-auto"
+      [ngClass]="paymentsExpanded
+        ? 'bi-chevron-up'
+        : 'bi-chevron-down'">
+    </i>
+  </button>
+
+  <!-- Dropdown content -->
+  <div class="submenu" *ngIf="paymentsExpanded">
+
+    <a
+      routerLink="/customer/emi-schedule"
+      routerLinkActive="active"
+      class="submenu-link"
+      (click)="paymentsExpanded = true">
+
+      <i class="bi bi-calendar-check"></i>
+      <span>EMI Scheduler</span>
     </a>
+
+           <!-- Payment History -->
+        <!-- <a
+          routerLink="/customer/payment-history"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="submenu-link">
+
+          <i class="bi bi-clock-history"></i>
+          <span>Payment History</span>
+        </a> -->
+
+
+
+<a
+  href="#"
+  class="submenu-link"
+  (click)="openPaymentHistory(); $event.preventDefault()">
+
+  <i class="bi bi-clock-history"></i>
+  <span>Payment History</span>
+</a>
+
+<a
+  routerLink="/customer/my-penalty"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="submenu-link">
+
+  <i class="bi bi-exclamation-triangle"></i>
+  <span>My Penalty</span>
+</a>
+
+  </div>
+</div>
 
     <a routerLink="/support" class="menu-link">
       <i class="bi bi-headset"></i>

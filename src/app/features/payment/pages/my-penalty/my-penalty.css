@@ -1,0 +1,138 @@
+.penalty-page {
+  padding: 28px;
+  color: #1f2937;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.refresh-btn,
+.error-state button {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  background: #1d4ed8;
+  color: #fff;
+  cursor: pointer;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.account-info span {
+  color: #6b7280;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+
+th,
+td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+td {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.loading-state,
+.empty-state,
+.error-state {
+  padding: 32px;
+  margin-top: 16px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.empty-state i {
+  font-size: 32px;
+  color: #16a34a;
+}
+
+.empty-state h3 {
+  margin: 12px 0 8px;
+}
+
+.empty-state p {
+  color: #6b7280;
+}
+
+.error-state {
+  color: #991b1b;
+}
+
+@media (max-width: 640px) {
+  .penalty-page {
+    padding: 16px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+  }
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #fff3cd;
+  color: #856404;
+}

@@ -50,3 +50,32 @@
     min-width: 190px;
   }
 }
+.payment-toggle {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.submenu {
+  padding-left: 20px;
+  margin-top: 4px;
+}
+
+.submenu-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  text-decoration: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submenu-link.active {
+  background: #e8f1ff;
+  color: #075bbb;
+  font-weight: 600;
+}

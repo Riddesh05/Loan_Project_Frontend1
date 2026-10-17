@@ -1,11 +1,10 @@
 
 import { Component } from '@angular/core';
-import { CustomerSidebar } from '../../../../core/theme/customer-sidebar/customer-sidebar';
 
 @Component({
   selector: 'app-customer-dashboard',
   standalone: true,
-  imports: [CustomerSidebar],
+  imports: [],
   templateUrl: './customer-dashboard.html',
   styleUrl: './customer-dashboard.css'
 })

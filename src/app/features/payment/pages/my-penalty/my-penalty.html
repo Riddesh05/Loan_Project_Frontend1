@@ -1,0 +1,86 @@
+<section class="penalty-page">
+  <div class="page-header">
+    <div>
+      <h1>My Penalty</h1>
+      <p>Check your loan account's penalty details here.</p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-btn"
+      (click)="loadPenalties()"
+      [disabled]="loading">
+      {{ loading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="account-info">
+    <span>Loan Account ID</span>
+    <strong>#{{ loanAccountId }}</strong>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    Loading penalty details...
+  </div>
+
+  <div class="error-state" *ngIf="!loading && errorMessage">
+    {{ errorMessage }}
+    <button type="button" (click)="loadPenalties()">Try Again</button>
+  </div>
+
+  <div
+    class="empty-state"
+    *ngIf="!loading && !errorMessage && penalties.length === 0">
+    <i class="bi bi-check-circle"></i>
+    <h3>No Penalty Records</h3>
+    <p>Is loan account ke liye koi penalty record nahi mila.</p>
+  </div>
+
+  
+<div
+  class="table-wrapper"
+  *ngIf="!loading && !errorMessage && penalties.length > 0">
+
+  <table>
+    <thead>
+      <tr>
+        <th *ngFor="let column of columns">
+          {{ getColumnLabel(column) }}
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let penalty of penalties; trackBy: trackByIndex">
+
+        <td *ngFor="let column of columns">
+          <ng-container [ngSwitch]="column">
+
+            
+<span *ngSwitchCase="'penaltyAmount'">
+  {{
+    getPenaltyAmount(penalty) === null
+      ? '—'
+      : (getPenaltyAmount(penalty) | currency:'INR':'symbol':'1.2-2')
+  }}
+</span>
+
+
+            <span *ngSwitchCase="'status'"
+                  class="status-badge">
+              {{ displayValue(penalty[column]) }}
+            </span>
+
+            <span *ngSwitchDefault>
+              {{ displayValue(penalty[column]) }}
+            </span>
+
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
